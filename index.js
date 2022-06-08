@@ -27,5 +27,5 @@ app.all('*', function (req, res) {
     res.status(404).json({ message: 'WHAT???' });
 })
 
-//listen on port 8080 for incoming requests
-app.listen(port, host, () => console.log(`App listening at http://${host}:${port}/`));
+//listen for incoming requests
+app.listen(port, () => console.log(`App listening at http://${host}:${port}/`));
