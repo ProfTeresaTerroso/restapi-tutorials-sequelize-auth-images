@@ -16,7 +16,8 @@ const config = {
      // CLOUDINARY (image hosting)
      C_CLOUD_NAME: process.env.C_CLOUD_NAME,
      C_API_KEY: process.env.C_API_KEY,
-     C_API_SECRET: process.env.C_API_SECRET
+     C_API_SECRET: process.env.C_API_SECRET,
+     MONGO_URL: process.env.MONGO_URL
 };
 
 module.exports = config;

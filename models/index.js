@@ -29,7 +29,7 @@ const mongoose = require("mongoose");
 
 const db = {};
 db.mongoose = mongoose;
-db.url = dbConfig.URL;
+db.url = dbConfig.MONGO_URL;
 
 (async () => {
     try {
