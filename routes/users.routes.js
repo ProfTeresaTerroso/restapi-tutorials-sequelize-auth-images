@@ -8,31 +8,31 @@ const userController = require("../controllers/user.controller");
 // NEW MULTER
 const multer = require('multer');
 const storage = multer.diskStorage({
+    // set up the directory where all files will be saved​
     destination: (req, file, cb) => {
-        cb(null, 'uploads')
+        cb(null, '/tmp') 
     },
+    // give the files a new identifier​
     filename: (req, file, cb) => {
         cb(null, file.fieldname + '-' + Date.now())
     }
-}); // save the file to memory first
-const multerUploads = multer({ storage }).single('image'); // specifies the field name multer should go to when it’s looking for the file
+}); 
+// acccepts a single file upload: 
+//  specifies the field name where multer looks for the file​
+//  multer will look for files in request.file.image
+const multerUploads = multer({ storage }).single('image'); 
 
 // express router
 let router = express.Router();
 
 router.use((req, res, next) => {
-    // res.header(
-    //     "Access-Control-Allow-Headers",
-    //     "x-access-token, Origin, Content-Type, Accept"
-    // );
-
     console.log(`${req.method} ${req.originalUrl}`);
     next()
 })
 
 // AUTH CONTROLLER: 
 // the user needs to send the token on each request to the secure routes
-// this middleware verifies the provided token and performs extra security checks like analyse the logged user profile 
+// this middleware verifies the provided token - function verifyToken
 
 router.route('/')
     .get(authController.verifyToken, userController.getAllUsers) //ADMIN ACCESS ONLY

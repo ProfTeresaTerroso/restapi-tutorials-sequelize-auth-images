@@ -14,6 +14,7 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
 
 (async () => {
     try {
+        console.log(dbConfig)
         await sequelize.authenticate;
         console.log('Connection has been established successfully.');
     } catch (err) {
@@ -27,7 +28,7 @@ db.sequelize = sequelize;
 // add User model into DB
 db.user = require("./user.model.js")(sequelize, DataTypes);
 
-// optionally: SYNC
+// // optionally: SYNC
 // (async () => {
 //     try {
 //         // await sequelize.sync({ force: true });

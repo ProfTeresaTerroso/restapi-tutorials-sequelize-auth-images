@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-// const bcrypt = require("bcryptjs");
+const bcrypt = require("bcryptjs");
 
 const config = require("../config/index.js");
 
@@ -19,9 +19,12 @@ const { ValidationError } = require('sequelize');
 
 exports.create = async (req, res) => {
     try {
+        console.log(req.body)
+        
         if (!req.body && !req.body.username && !req.body.password)
             return res.status(400).json({ success: false, msg: "Username and password are mandatory" });
     
+            console.log(req.body)
         // NEW
         let user_image = null;
         if (req.file) {
@@ -42,8 +45,8 @@ exports.create = async (req, res) => {
         let user = await User.create({
             username: req.body.username,
             email: req.body.email,
-            // password: bcrypt.hashSync(req.body.password, 10),
-            password: req.body.password,
+            password: bcrypt.hashSync(req.body.password, 10),
+            // password: req.body.password,
             role: req.body.role,
             // NEW
             profile_image: user_image ? user_image.url : null,
@@ -66,21 +69,23 @@ exports.create = async (req, res) => {
 
 exports.login = async (req, res) => {
     try {
+        console.log(req.body)
         if (!req.body || !req.body.username || !req.body.password)
             return res.status(400).json({ success: false, msg: "Failed! Must provide username and password." });
 
         let user = await User.findOne({
             where: { username: req.body.username }
         });
+        console.log(user)
         if (!user)
             return res.status(404).json({ success: false, msg: "User not found." });
 
         // decrypt psswd from DB and compare with the provided psswd in request
         // tests a string (password in body) against a hash (password in database)​
-        // const check = bcrypt.compareSync(
-        //     req.body.password, user.password
-        // );
-        const check = req.body.password == user.password;
+        const check = bcrypt.compareSync(
+            req.body.password, user.password
+        );
+        // const check = req.body.password == user.password;
 
         if (!check) {
             return res.status(401).json({
