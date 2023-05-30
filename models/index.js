@@ -33,6 +33,7 @@ db.url = dbConfig.MONGO_URL;
 
 (async () => {
     try {
+        console.log(db.url )
         await db.mongoose.connect(db.url,
                 {
                     useNewUrlParser: true,
