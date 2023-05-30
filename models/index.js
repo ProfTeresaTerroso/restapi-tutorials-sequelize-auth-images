@@ -1,29 +1,50 @@
 const dbConfig = require('../config/index.js');
-const { Sequelize, DataTypes } = require('sequelize');
+// const { Sequelize, DataTypes } = require('sequelize');
 
-const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
-    host: dbConfig.HOST,
-    dialect: dbConfig.dialect,
-    pool: {
-        max: dbConfig.pool.max,
-        min: dbConfig.pool.min,
-        acquire: dbConfig.pool.acquire,
-        idle: dbConfig.pool.idle
-    }
-});
+// const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
+//     host: dbConfig.HOST,
+//     dialect: dbConfig.dialect,
+//     pool: {
+//         max: dbConfig.pool.max,
+//         min: dbConfig.pool.min,
+//         acquire: dbConfig.pool.acquire,
+//         idle: dbConfig.pool.idle
+//     }
+// });
+
+// (async () => {
+//     try {
+//         console.log(dbConfig)
+//         await sequelize.authenticate;
+//         console.log('Connection has been established successfully.');
+//     } catch (err) {
+//         console.error('Unable to connect to the database:', err);
+//     }
+// })();
+
+// const db = {};
+// db.sequelize = sequelize;
+
+const mongoose = require("mongoose");
+
+const db = {};
+db.mongoose = mongoose;
+db.url = dbConfig.URL;
 
 (async () => {
     try {
-        console.log(dbConfig)
-        await sequelize.authenticate;
-        console.log('Connection has been established successfully.');
-    } catch (err) {
-        console.error('Unable to connect to the database:', err);
+        await db.mongoose.connect(db.url,
+                {
+                    useNewUrlParser: true,
+                    useUnifiedTopology: true
+                }
+            );
+        console.log("Connected to the database!");
+    } catch (error) {
+        console.log("Cannot connect to the database!", error);
+        process.exit();
     }
 })();
-
-const db = {};
-db.sequelize = sequelize;
 
 // add User model into DB
 db.user = require("./user.model.js")(sequelize, DataTypes);
