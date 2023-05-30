@@ -10,11 +10,11 @@ const multer = require('multer');
 const storage = multer.diskStorage({
     // set up the directory where all files will be saved​
     destination: (req, file, cb) => {
-        cb(null, '/tmp') 
+        cb(null, 'tmp') 
     },
     // give the files a new identifier​
     filename: (req, file, cb) => {
-        cb(null, file.fieldname + '-' + Date.now())
+        cb(null, Date.now() + "-" + file.originalname)
     }
 }); 
 // acccepts a single file upload: 
