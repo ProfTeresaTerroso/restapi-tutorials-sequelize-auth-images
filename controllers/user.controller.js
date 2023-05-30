@@ -127,7 +127,8 @@ exports.getAllUsers = async (req, res) => {
                 success: false, msg: "This request requires ADMIN role!"
             });
 
-        let users = await User.findAll({ attributes: ['id', 'username', 'email', 'role'] })
+        // let users = await User.findAll({ attributes: ['id', 'username', 'email', 'role'] })
+        let users = await User.findAll()
         res.status(200).json({ success: true, users: users });
     }
     catch (err) {
