@@ -42,7 +42,18 @@ exports.create = async (req, res) => {
 
 
         // Save user to DB
-        let user = await User.create({
+        // let user = await User.create({
+        //     username: req.body.username,
+        //     email: req.body.email,
+        //     password: bcrypt.hashSync(req.body.password, 10),
+        //     // password: req.body.password,
+        //     role: req.body.role,
+        //     // NEW
+        //     profile_image: user_image ? user_image.url : null,
+        //     cloudinary_id: user_image ? user_image.public_id : null
+        // });
+
+        const user = new User({
             username: req.body.username,
             email: req.body.email,
             password: bcrypt.hashSync(req.body.password, 10),
@@ -53,6 +64,7 @@ exports.create = async (req, res) => {
             cloudinary_id: user_image ? user_image.public_id : null
         });
         console.log(user)
+        await user.save();
         return res.status(201).json({ success: true, msg: "User was registered successfully!" });
 
     }

@@ -46,8 +46,9 @@ db.url = dbConfig.MONGO_URL;
     }
 })();
 
-// add User model into DB
-db.user = require("./user.model.js")(sequelize, DataTypes);
+// // add User model into DB
+// db.user = require("./user.model.js")(sequelize, DataTypes);
+db.user = require("./user.model.js")(mongoose);
 
 // // optionally: SYNC
 // (async () => {
