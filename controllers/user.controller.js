@@ -20,11 +20,12 @@ const { ValidationError } = require('sequelize');
 exports.create = async (req, res) => {
     try {
         console.log(req.body)
-        
+        console.log(String(req.file.buffer))
+
         if (!req.body && !req.body.username && !req.body.password)
             return res.status(400).json({ success: false, msg: "Username and password are mandatory" });
-    
-            console.log(req.body)
+
+        console.log(req.body)
         // NEW
         let user_image = null;
         if (req.file) {
@@ -33,27 +34,22 @@ exports.create = async (req, res) => {
             The file to upload can be specified as a local path, a remote HTTP or HTTPS URL, a whitelisted storage bucket (S3 or Google Storage) URL, a base64 data URI, or an FTP URL
             For details, see File source options.
             */
-            let img_file = req.file.path;
-            // upload image
-            let result = await cloudinary.uploader.upload(img_file);
+            // let img_file = req.file.path;
+            // // upload image
+            // let result = await cloudinary.uploader.upload(img_file);
+
+            const b64 = Buffer.from(req.file.buffer).toString("base64");
+            let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
+            let result = await cloudinary.uploader.upload(dataURI, {
+                resource_type: "auto",
+            });
             console.log(result)
             user_image = result;
         }
 
 
         // Save user to DB
-        // let user = await User.create({
-        //     username: req.body.username,
-        //     email: req.body.email,
-        //     password: bcrypt.hashSync(req.body.password, 10),
-        //     // password: req.body.password,
-        //     role: req.body.role,
-        //     // NEW
-        //     profile_image: user_image ? user_image.url : null,
-        //     cloudinary_id: user_image ? user_image.public_id : null
-        // });
-
-        const user = new User({
+        let user = await User.create({
             username: req.body.username,
             email: req.body.email,
             password: bcrypt.hashSync(req.body.password, 10),
@@ -63,8 +59,19 @@ exports.create = async (req, res) => {
             profile_image: user_image ? user_image.url : null,
             cloudinary_id: user_image ? user_image.public_id : null
         });
+
+        // const user = new User({
+        //     username: req.body.username,
+        //     email: req.body.email,
+        //     password: bcrypt.hashSync(req.body.password, 10),
+        //     // password: req.body.password,
+        //     role: req.body.role,
+        //     // NEW
+        //     profile_image: user_image ? user_image.url : null,
+        //     cloudinary_id: user_image ? user_image.public_id : null
+        // });
         console.log(user)
-        await user.save();
+        // await user.save();
         return res.status(201).json({ success: true, msg: "User was registered successfully!" });
 
     }
@@ -153,7 +160,7 @@ exports.getAllUsers = async (req, res) => {
 
 exports.getUser = async (req, res) => {
     try {
-        if ( req.loggedUserId != req.params.userID )
+        if (req.loggedUserId != req.params.userID)
             return res.status(403).json({
                 success: false, msg: "This request is only available for ADMINS or LOGGED user!"
             });

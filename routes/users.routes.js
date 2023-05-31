@@ -7,20 +7,28 @@ const userController = require("../controllers/user.controller");
 
 // NEW MULTER
 const multer = require('multer');
-const storage = multer.diskStorage({
-    // set up the directory where all files will be saved​
-    destination: (req, file, cb) => {
-        cb(null, '/tmp') 
-    },
-    // give the files a new identifier​
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + "-" + file.originalname)
-    }
-}); 
+// const storage = multer.diskStorage({
+//     // set up the directory where all files will be saved​
+//     destination: (req, file, cb) => {
+//         cb(null, '/tmp') 
+//     },
+//     // give the files a new identifier​
+//     filename: (req, file, cb) => {
+//         cb(null, Date.now() + "-" + file.originalname)
+//     }
+// }); 
+const storage = multer.memoryStorage();
 // acccepts a single file upload: 
 //  specifies the field name where multer looks for the file​
 //  multer will look for files in request.file.image
-const multerUploads = multer({ storage }).single('image'); 
+const multerUploads = multer({ storage }).single('image');
+
+// var storage = multer.memoryStorage({
+//     destination: function(req, file, callback) {
+//        callback(null, '');
+//     }
+//  });
+//  var upload = multer({ storage: storage }).single('image');
 
 // express router
 let router = express.Router();

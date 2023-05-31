@@ -22,8 +22,7 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
     }
 })();
 
-// const db = {};
-// db.sequelize = sequelize;
+
 
 // const mongoose = require("mongoose");
 
@@ -47,7 +46,9 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
 //     }
 // })();
 
-// // add User model into DB
+const db = {};
+db.sequelize = sequelize;
+// add User model into DB
 db.user = require("./user.model.js")(sequelize, DataTypes);
 // db.user = require("./user.model.js")(mongoose);
 
